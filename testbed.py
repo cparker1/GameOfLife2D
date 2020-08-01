@@ -1,10 +1,10 @@
-import Grid
+import grid
 from os import system
 import time
 
 if __name__ == "__main__":
-    g = Grid.LifeGrid2D(30, 13)
-    Grid.LifeGrid2D.sprinkle_life(g, 100)
+    g = grid.LifeGrid2D(30, 13)
+    grid.LifeGrid2D.sprinkle_life(g, 100)
     step_cnt = 0
 
     while True:

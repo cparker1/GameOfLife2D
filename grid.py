@@ -1,4 +1,4 @@
-import Cell
+import cell
 import random
 import itertools
 
@@ -8,7 +8,7 @@ class LifeGrid2D(object):
         self.width = width #must be >2
         self.height = height #must be >2
         self.was_there_change = False
-        self.grid = [[Cell.LifeCell(h, w) for w in range(width)] for h in range(height)]
+        self.grid = [[cell.LifeCell(h, w) for w in range(width)] for h in range(height)]
         self.set_start_states()
         self.update_to_next_step()
 
