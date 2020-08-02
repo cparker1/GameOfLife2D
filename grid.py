@@ -12,6 +12,12 @@ class LifeGrid2D(object):
         self.set_start_states()
         self.update_to_next_step()
 
+    def get_size(self):
+        return (len(self.grid), len(self.grid[0]))
+
+    def get_cell(self, h, w):
+        return self.grid[h][w]
+
     def set_start_states(self):
         for h, row in enumerate(self.grid):
             for w, cell in enumerate(row):
