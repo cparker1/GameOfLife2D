@@ -25,6 +25,9 @@ LIFECELL_SPRITES = {LifeCell.ALIVE: "alive.png",
 SPRINKLE_TIMER = 10
 SPRINKLE_COUNT = int(2*SCREEN_X*2*SCREEN_Y/2)
 
+UPDATE_RATE = 10 #updates per sec
+UPDATE_PERIOD = 1/UPDATE_RATE
+
 # This helps reduce the amount of code used by loading objects, since all of
 # the objects are pretty much the same.
 def loadObject(tex=None, pos=LPoint3(0, 0), depth=SPRITE_POS, scale=1,
@@ -32,7 +35,7 @@ def loadObject(tex=None, pos=LPoint3(0, 0), depth=SPRITE_POS, scale=1,
     # Every object uses the plane model and is parented to the camera
     # so that it faces the screen.
     obj = loader.loadModel("models/plane")
-    obj.reparentTo(camera)
+    obj.reparentTo(render)
 
     # Set the initial position and scale.
     obj.setPos(pos.getX(), depth, pos.getY())
@@ -70,6 +73,7 @@ class GameView(ShowBase):
         self.g = grid.LifeGrid2D(2*SCREEN_X, 2*SCREEN_Y)
         grid.LifeGrid2D.sprinkle_life(self.g, 2*SPRINKLE_COUNT)
         self.sprinkle_timer = 0
+        self.sim_step_timer = UPDATE_PERIOD
 
         # Disable default mouse-based camera control.  This is a method on the
         # ShowBase class from which we inherit.
@@ -115,10 +119,13 @@ class GameView(ShowBase):
             self.g.sprinkle_life(SPRINKLE_COUNT)
 
         #update the grid state
-        self.g.process_current_step()
-        self.g.update_to_next_step()
-        self.update_sprites()
-        time.sleep(0.25)
+        self.sim_step_timer += globalClock.getDt()
+        if self.sim_step_timer > UPDATE_PERIOD:
+            self.sim_step_timer -= UPDATE_PERIOD
+            self.g.process_current_step()
+            self.g.update_to_next_step()
+            self.update_sprites()
+
         return Task.cont
 
 
